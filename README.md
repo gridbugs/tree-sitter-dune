@@ -1,22 +1,16 @@
 # tree-sitter-dune
 
 [![CI](https://github.com/emillon/tree-sitter-dune/workflows/CI/badge.svg)](https://github.com/emillon/tree-sitter-dune/actions)
-[![npm](https://img.shields.io/npm/v/tree-sitter-dune.svg)](https://www.npmjs.com/package/tree-sitter-dune)
-[![crates.io](https://img.shields.io/crates/v/tree-sitter-dune.svg)](https://crates.io/crates/tree-sitter-dune)
-[![pypi](https://img.shields.io/pypi/v/tree-sitter-dune.svg)](https://pypi.org/project/tree-sitter-dune/)
-[![discord](https://img.shields.io/discord/1063097320771698699?logo=discord&label=discord)](https://discord.gg/w7nTvsVJhm)
-[![matrix](https://img.shields.io/matrix/tree-sitter-chat:matrix.org?logo=matrix&label=matrix)](https://matrix.to/#/#tree-sitter-chat:matrix.org)
 
 Tree-sitter grammar for [Dune](https://dune.readthedocs.io/) build system files.
 
 ## Features
 
 - **Complete dune file support**: Parses all major stanzas including `executable`, `library`, `rule`, `test`, `alias`, and more
-- **dune-project support**: Full support for project metadata files including `lang`, `name`, `version`, `package`, and all project configuration stanzas
-- **dune-workspace support**: Complete support for workspace configuration including `context`, `profile`, and cross-compilation setup
-- **Syntax highlighting**: Comprehensive highlight queries for editor integration
+- **dune-project support**: Support for project metadata files including `lang`, `name`, `version`, `package`, and all project configuration stanzas
+- **dune-workspace support**: Support for workspace configuration including `context`, `profile`, and cross-compilation setup
+- **Syntax highlighting**: Highlight queries for editor integration
 - **Field markers**: Structured AST with named fields for precise code navigation
-- **86+ test cases**: Extensively tested against real-world Dune files
 
 ## Supported File Types
 
@@ -26,140 +20,15 @@ Tree-sitter grammar for [Dune](https://dune.readthedocs.io/) build system files.
 
 ## Installation
 
-### NPM
-
-```bash
-npm install tree-sitter-dune
-```
-
-### Cargo
-
-```bash
-cargo add tree-sitter-dune
-```
-
-### Tree-sitter CLI
-
-```bash
-git clone https://github.com/emillon/tree-sitter-dune
-cd tree-sitter-dune
-tree-sitter generate
-tree-sitter test
-```
+Nothing published to package repositories just yet, it's still in development.
 
 ## Usage
 
-### Node.js
+### With tree-sitter CLI
 
-```javascript
-const Parser = require('tree-sitter');
-const Dune = require('tree-sitter-dune');
-
-const parser = new Parser();
-parser.setLanguage(Dune);
-
-const sourceCode = `
-(library
- (name my_lib)
- (libraries base stdio))
-`;
-
-const tree = parser.parse(sourceCode);
-console.log(tree.rootNode.toString());
+```bash
+tree-sitter parse example.opam
 ```
-
-### Rust
-
-```rust
-use tree_sitter::Parser;
-
-fn main() {
-    let mut parser = Parser::new();
-    parser.set_language(&tree_sitter_dune::LANGUAGE.into()).expect("Error loading Dune grammar");
-
-    let source_code = r#"
-(library
- (name my_lib)
- (libraries base stdio))
-"#;
-
-    let tree = parser.parse(source_code, None).unwrap();
-    println!("{}", tree.root_node().to_sexp());
-}
-```
-
-### Python
-
-```python
-from tree_sitter import Language, Parser
-import tree_sitter_dune
-
-parser = Parser()
-parser.set_language(Language(tree_sitter_dune.language(), "dune"))
-
-source_code = b"""
-(library
- (name my_lib)
- (libraries base stdio))
-"""
-
-tree = parser.parse(source_code)
-print(tree.root_node.sexp())
-```
-
-### Go
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    sitter "github.com/tree-sitter/go-tree-sitter"
-    dune "github.com/emillon/tree-sitter-dune/bindings/go"
-)
-
-func main() {
-    parser := sitter.NewParser()
-    parser.SetLanguage(sitter.NewLanguage(dune.Language()))
-
-    sourceCode := []byte(`
-(library
- (name my_lib)
- (libraries base stdio))
-`)
-
-    tree := parser.Parse(sourceCode, nil)
-    fmt.Println(tree.RootNode().ToSexp())
-}
-```
-
-## Editor Integration
-
-### Neovim
-
-With [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter):
-
-```lua
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "dune" },
-  highlight = {
-    enable = true,
-  },
-}
-```
-
-### Emacs
-
-With [tree-sitter mode](https://github.com/emacs-tree-sitter/elisp-tree-sitter):
-
-```elisp
-(add-to-list 'tree-sitter-major-mode-language-alist '(dune-mode . dune))
-```
-
-### VS Code
-
-Install the [Dune extension](https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform) which uses this grammar.
 
 ## Grammar Coverage
 
@@ -188,11 +57,9 @@ Install the [Dune extension](https://marketplace.visualstudio.com/items?itemName
 - `deprecated_library_name` - Library renaming
 - Actions: `run`, `bash`, `copy`, `diff`, `write-file`, `with-stdout-to`, `progn`, and 15+ more
 
-**Coverage:** 30/34 stanzas (88%), ~99% real-world usage
-
 ### dune-project files
 
-✅ **Fully Supported (100% coverage):**
+✅ **Fully Supported:**
 - `lang` - Language version (required)
 - `name`, `version`, `license` - Project metadata
 - `authors`, `maintainers`, `maintenance_intent` - Contributors
@@ -209,8 +76,6 @@ Install the [Dune extension](https://marketplace.visualstudio.com/items?itemName
 - `subst` - Watermarking
 - Boolean flags: `accept_alternative_dune_file_name`, `executables_implicit_empty_intf`, `expand_aliases_in_sandbox`, `implicit_transitive_deps`, `map_workspace_root`, `use_standard_c_and_cxx_flags`, `wrapped_executables`
 
-**Coverage:** 29/29 stanzas (100%)
-
 ### dune-workspace files
 
 ✅ **Fully Supported:**
@@ -222,27 +87,6 @@ Install the [Dune extension](https://marketplace.visualstudio.com/items?itemName
   - Additional: `root`, `lock_dir`, `paths`, `env`, `fdo`, `targets`
 - `profile` - Build profile selection (dev/release/custom)
 
-## Development
-
-### Building
-
-```bash
-npm install -g tree-sitter-cli
-tree-sitter generate
-```
-
-### Testing
-
-```bash
-tree-sitter test
-```
-
-### Debugging
-
-```bash
-tree-sitter parse examples/dune
-tree-sitter parse --debug examples/dune-project
-```
 
 ## Contributing
 
